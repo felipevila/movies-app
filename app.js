@@ -1,7 +1,12 @@
-var express = require('express');
-var nunjucks = require('nunjucks');
+const express = require('express');
+const nunjucks = require('nunjucks');
+const axios = require('axios');
+const service = require('./api.js');
+const app = express();
 
-var app = express();
+let movies, results;
+let featured = ["", "", "", "", "", ""];
+const featuredIds = [3314,4751,1365,1993,3274,997];
 
 // Setup nunjucks templating engine
 nunjucks.configure('views', {
@@ -9,25 +14,51 @@ nunjucks.configure('views', {
     express: app
 });
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8000);
+
+app.use(express.static('assets'));
+
+
+// Get movies data from endpoint
+service.getMovies(function(resp) {
+    movies = resp.data.data.movies;
+});
+
+// Get featurted movies IDs
+for (let i = 0; i < featuredIds.length; i++) {
+    service.getMovieById(featuredIds[i], function(resp) {
+        featured[i] = resp.data.data.movie;
+    });
+}
 
 // Home page
 app.get('/', function(req, res) {
     res.render('index.html', {
-        page: 'home',
-        port: app.get('port')
+        movies,
+        featured,
     });
 });
 
-// Other example
-app.get('/example', function(req, res) {
-    res.render('example.html', {
-        page: 'example',
-        port: app.get('port')
+// Movie detail
+app.get('/movie/:id', function (req, res) {
+    service.getMovieById(req.params.id, function(response) {
+        res.render('movie.html', {
+            singleMovie: response.data.data.movie,
+        });
     });
 });
 
-// Kick start our server
+// Search Results
+app.get('/results', function(req, res) {
+    service.getMovieByTerm(req.query.s, function(response) {
+        results = response.data.data.movies;
+        res.render('results.html', {
+            results,
+        });
+    });
+});
+
+// Start server
 app.listen(app.get('port'), function() {
     console.log('Server started on port', app.get('port'));
 });
