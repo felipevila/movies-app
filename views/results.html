@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% import "header.html" as header %}
+{% import "footer.html" as footer %}
+
+{% block body %}
+
+    {{header.header()}}
+	<section class="container" style="margin-top: 100px;">
+        <div class="col-sm-12">
+            <h1>{{results[i].title}}</h1>
+            <div class="row">
+                <div class="col-md-12">
+                    {% for i in range(0, results.length) -%}
+                        {% if i % 4 == 0 %}
+                        <div class="movie movie--test movie--test--dark movie--test--left">
+                        {% elif i % 4 == 1 %}
+                        <div class="movie movie--test movie--test--light movie--test--left">
+                        {% elif i % 4 == 2 %}
+                        <div class="movie movie--test movie--test--light movie--test--right">
+                        {% else %}
+                        <div class="movie movie--test movie--test--dark movie--test--right">
+                        {% endif %}
+                            <div class="movie__images">
+                                <a href="movie/{{results[i].id}}" class="movie-beta__link">
+                                    <img alt='' src={{results[i].large_cover_image}}>
+                                </a>
+                            </div>
+                        
+                            <div class="movie__info">
+                                <a href='movie/{{results[i].id}}' class="movie__title">{{results[i].title_long}}</a>
+                        
+                                <p class="movie__time">91 min</p>
+                        
+                                <p class="movie__option">
+                                    {% for genre in range(0, results[i].genres.length) -%}
+                                        <a href="#">{{ results[i].genres[genre] }}</a> |
+                                    {% endfor -%}
+                                </p>
+                        
+                                <div class="movie__rate">
+                                    <div class="score"></div>
+                                    <span class="movie__rating">{{results[i].rating}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    {{footer.footer()}}
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+
+{% import "header.html" as header %}
+{% import "footer.html" as footer %}
+
+
+{% block body %}
+
+    {{header.header()}}
+    <!-- Search bar -->
+    <div class="search-wrapper" style="margin-top: 55px; padding-top: 20px;">
+        <div class="container container--add">
+            <form id='search-form' method='get' class="search">
+                <input type="text" class="search__field" placeholder="Search">
+                <select name="sorting_item" id="search-sort" class="search__sort" tabindex="0">
+                    <option value="1" selected='selected'>By title</option>
+                    <option value="2">By year</option>
+                    <option value="3">By producer</option>
+                    <option value="4">By title</option>
+                    <option value="5">By year</option>
+                </select>
+                <button type='submit' class="btn btn-md btn--danger search__button">search a movie</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="container">
+        <div class="col-sm-12">
+            <div class="movie">
+                <h2 class="page-heading">{{singleMovie.title}}</h2>
+
+                <div class="movie__info">
+                    <div class="col-sm-4 col-md-3 movie-mobile">
+                        <div class="movie__images">
+                            <span class="movie__rating">{{singleMovie.rating}}</span>
+                            <img alt='' src={{singleMovie.large_cover_image}}>
+                        </div>
+                        <div class="movie__rate">Your vote: <div id='score' class="score"></div></div>
+                    </div>
+
+                    <div class="col-sm-8 col-md-9">
+                        <p class="movie__time">{{singleMovie.runtime}} min</p>
+
+                        <p class="movie__option"><strong>Year: </strong><a href="#">{{singleMovie.year}}</a></p>
+                        <p class="movie__option"><strong>Category: </strong>
+                            {% for i in range(0, singleMovie.genres.length) -%}
+                                <a href="#">{{singleMovie.genres[i]}}, </a>
+                            {%- endfor %}
+                        </p>
+                        <p class="movie__option"><strong>Age restriction: </strong><a href="#">{{singleMovie.mpa_rating}}</a></p>
+
+                        <div class="movie__btns movie__btns--full">
+                            <a href="#" class="watchlist">Add to watchlist</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <h2 class="page-heading">The plot</h2>
+
+                <p class="movie__describe">{{singleMovie.description_intro}}</p>
+
+                <h2 class="page-heading">photos &amp; videos</h2>
+
+                <div class="movie__media">
+                    <div class="movie__media-switch">
+                        <a href="#" class="watchlist list--photo" data-filter='media-photo'>3 photos</a>
+                        {% if singleMovie.yt_trailer_code|length %}
+                        <a href="#" class="watchlist list--video" data-filter='media-video'>1 video</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                          {% if singleMovie.large_screenshot_image1|length %}
+                          <div class="swiper-slide media-photo">
+                            <a href='{{singleMovie.large_screenshot_image1}}' class="movie__media-item ">
+                                 <img alt='' src="{{singleMovie.medium_screenshot_image1}}">
+                            </a>
+                          </div>
+                          {% endif %}
+                          {% if singleMovie.large_screenshot_image2|length %}
+                          <div class="swiper-slide media-photo">
+                            <a href='{{singleMovie.large_screenshot_image2}}' class="movie__media-item ">
+                                 <img alt='' src="{{singleMovie.medium_screenshot_image2}}">
+                            </a>
+                          </div>
+                          {% endif %}
+                          {% if singleMovie.large_screenshot_image3|length %}
+                          <div class="swiper-slide media-photo">
+                            <a href='{{singleMovie.large_screenshot_image3}}' class="movie__media-item ">
+                                 <img alt='' src="{{singleMovie.medium_screenshot_image3}}">
+                            </a>
+                          </div>
+                          {% endif %}
+
+                          {% if singleMovie.yt_trailer_code|length %}
+                          <div class="swiper-slide media-video">
+                                <a target="_blank" href='https://www.youtube.com/watch?v={{singleMovie.yt_trailer_code}}' class="movie__media-item">
+                                    <img alt='' src="https://img.youtube.com/vi/{{singleMovie.yt_trailer_code}}/maxresdefault.jpg">
+                                </a>
+                          </div>
+                          {% endif %}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    
+    {{footer.footer()}}
+
+{% endblock %}
