@@ -58,6 +58,16 @@ app.get('/results', function(req, res) {
     });
 });
 
+// Search Results with Filter
+app.get('/results', function(req, res) {
+    service.getMovieByTerm(req.query.searchField, function(response) {
+        filteredResults = response;
+        res.render('results.html', {
+            filteredResults,
+        });
+    });
+});
+
 // Start server
 app.listen(app.get('port'), function() {
     console.log('Server started on port', app.get('port'));

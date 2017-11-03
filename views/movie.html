@@ -10,14 +10,12 @@
     <!-- Search bar -->
     <div class="search-wrapper" style="margin-top: 55px; padding-top: 20px;">
         <div class="container container--add">
-            <form id='search-form' method='get' class="search">
+            <form id='search-form' method='get' class="search" action="/results">
                 <input type="text" class="search__field" placeholder="Search">
                 <select name="sorting_item" id="search-sort" class="search__sort" tabindex="0">
                     <option value="1" selected='selected'>By title</option>
                     <option value="2">By year</option>
-                    <option value="3">By producer</option>
-                    <option value="4">By title</option>
-                    <option value="5">By year</option>
+                    <option value="3">By genre</option>
                 </select>
                 <button type='submit' class="btn btn-md btn--danger search__button">search a movie</button>
             </form>
@@ -42,7 +40,7 @@
                     <div class="col-sm-8 col-md-9">
                         <p class="movie__time">{{singleMovie.runtime}} min</p>
 
-                        <p class="movie__option"><strong>Year: </strong><a href="#">{{singleMovie.year}}</a></p>
+                        <p class="movie__option"><strong>Year: </strong><a href=+"#">{{singleMovie.year}}</a></p>
                         <p class="movie__option"><strong>Category: </strong>
                             {% for i in range(0, singleMovie.genres.length) -%}
                                 <a href="#">{{singleMovie.genres[i]}}, </a>
